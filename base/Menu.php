@@ -176,6 +176,9 @@ class Menu
     public function root($role = 'root')
     {
         $user = \Yii::$app->getUser()->getIdentity();
+        if ($user === null) {
+            return false;
+        }
         // 第一个用户
         if ($user['id'] == 1 || $user['role'] == 1 || $user['level'] == 1) {
             return true;
