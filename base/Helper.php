@@ -106,4 +106,29 @@ class Helper
     {
         return \Yii::$app->security->generatePasswordHash($password, $cost);
     }
+
+    /**
+     * 获取本机IP地址
+     * @return null|string
+     */
+    public static function getLocalIp()
+    {
+        static $ip = null;
+        if (!$ip) {
+            // debian
+            $ip = exec("/sbin/ifconfig eth0 2>&1 | grep -E 'inet ' | awk '{split($2,a,\":\");print a[2]}'");
+            // centos
+            if (!$ip) {
+                return exec("/sbin/ifconfig em1 2>&1 | grep -E 'inet ' | awk '{split($2,a,\":\");print a[2]}'");
+            }
+            // mac
+            if (!$ip) {
+                return exec("/sbin/ifconfig en0 | grep -E 'inet ' |  awk '{print $2}'");
+            }
+            if (!$ip) {
+                return exec("/sbin/ifconfig en1 | grep -E 'inet ' |  awk '{print $2}'");
+            }
+        }
+        return $ip;
+    }
 }
