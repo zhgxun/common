@@ -16,7 +16,7 @@ return [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=new_zoulu',
             'username' => 'root',
-            'password' => 'c5zx4',
+            'password' => '********',
             'charset' => 'utf8',
         ],
 
@@ -25,7 +25,7 @@ return [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=task_manage',
             'username' => 'root',
-            'password' => 'c5zx4',
+            'password' => '********',
             'charset' => 'utf8',
         ],
 
