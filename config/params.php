@@ -12,4 +12,6 @@ return [
         'prefix' => '',
         'baseurl' => 'http://7xnht2.com1.z0.glb.clouddn.com/@',
     ],
+    // 日志文件保存位置
+    'logPath' => '/Users/zhgxun/Public/html/logs',
 ];

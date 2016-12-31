@@ -19,23 +19,23 @@ class Helper
      * @param string $email 要过滤的邮箱
      * @return mixed
      */
-    public function isEmail($email) {
+    public static function isEmail($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
     /**
      * 控制台输出显示
-     * @param mixed $input 输入值
-     * @param mixed $exit 是否退出
+     * @param $input
+     * @param int $exit
      */
-    public function echoLn($input, $exit = 0)
+    public static function echoLn($input, $exit = 0)
     {
         if (is_string($input)|| is_numeric($input)) {
             echo $input . PHP_EOL;
         } else if (is_array($input)) {
             print_r($input);
         } else {
-            var_dump($input);
+            var_export($input);
         }
         if ($exit) {
             exit();
@@ -47,7 +47,7 @@ class Helper
      * @param string $filePath 文件路径
      * @return string
      */
-    public function getFileName($filePath)
+    public static function getFileName($filePath)
     {
         $fileName = basename($filePath);
         return substr($fileName, 0, strrpos($fileName, '.'));
@@ -102,7 +102,7 @@ class Helper
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function getPassword($password, $cost = 15)
+    public static function getPassword($password, $cost = 15)
     {
         return \Yii::$app->security->generatePasswordHash($password, $cost);
     }
@@ -111,7 +111,7 @@ class Helper
      * 获取本机IP地址
      * @return null|string
      */
-    public static function getLocalIp()
+    public function getLocalIp()
     {
         static $ip = null;
         if (!$ip) {
@@ -119,16 +119,48 @@ class Helper
             $ip = exec("/sbin/ifconfig eth0 2>&1 | grep -E 'inet ' | awk '{split($2,a,\":\");print a[2]}'");
             // centos
             if (!$ip) {
-                return exec("/sbin/ifconfig em1 2>&1 | grep -E 'inet ' | awk '{split($2,a,\":\");print a[2]}'");
+                $ip = exec("/sbin/ifconfig em1 2>&1 | grep -E 'inet ' | awk '{split($2,a,\":\");print a[2]}'");
             }
             // mac
             if (!$ip) {
-                return exec("/sbin/ifconfig en0 | grep -E 'inet ' |  awk '{print $2}'");
+                $ip = exec("/sbin/ifconfig en0 | grep -E 'inet ' |  awk '{print $2}'");
             }
             if (!$ip) {
-                return exec("/sbin/ifconfig en1 | grep -E 'inet ' |  awk '{print $2}'");
+                $ip = exec("/sbin/ifconfig en1 | grep -E 'inet ' |  awk '{print $2}'");
             }
         }
         return $ip;
+    }
+
+    /**
+     * 返回左闭合右开的时间区间
+     *
+     * @example
+     * $startDate = '2016-10-01'
+     * $endDate = '2016-10-03'
+     * return 2016-10-01,2016-10-02
+     * @param string $startDate 开始时间
+     * @param string $endDate 结束时间
+     * @return array
+     */
+    public function datesBetween($startDate, $endDate)
+    {
+        $date = array();
+        $currentDate = $startDate;
+        while ($currentDate != $endDate) {
+            $date[] = $currentDate;
+            $currentDate = date("Y-m-d", strtotime("+1 day", strtotime($currentDate)));
+        }
+        return $date;
+    }
+
+    /**
+     * 返回上一天
+     * @param string $date 当前日期
+     * @return string
+     */
+    public function nextMonth($date)
+    {
+        return date("Y-m-d", strtotime("+1 month", strtotime($date)));
     }
 }
