@@ -21,15 +21,6 @@ namespace common\models\log;
 class RequestLog
 {
     /**
-     * 资源
-     * @return null|object
-     */
-    public static function getDb()
-    {
-        return \Yii::$app->get('elasticsearch');
-    }
-
-    /**
      * 索引
      * @return string
      */
