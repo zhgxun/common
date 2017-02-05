@@ -11,6 +11,7 @@ use Yii;
  * @property string $title
  * @property integer $type
  * @property string $content
+ * @property string $summary
  * @property integer $userid
  * @property integer $readcount
  * @property string $remark
@@ -34,11 +35,11 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content'], 'required'],
+            [['title', 'content', 'summary', 'remark'], 'required'],
             [['type', 'userid', 'readcount', 'status', 'ctime', 'utime'], 'integer'],
             [['content'], 'string'],
             [['title'], 'string', 'max' => 120],
-            [['remark'], 'string', 'max' => 255]
+            [['summary', 'remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,6 +53,7 @@ class Article extends \yii\db\ActiveRecord
             'title' => 'Title',
             'type' => 'Type',
             'content' => 'Content',
+            'summary' => '摘要',
             'userid' => 'Userid',
             'readcount' => 'Readcount',
             'remark' => 'Remark',
