@@ -40,6 +40,7 @@ class RequestLog
 
     /**
      * 映射
+     * 'index' => 'not_analyzed'不做分析
      * @return array
      */
     public static function mapping()
@@ -52,16 +53,16 @@ class RequestLog
                         'properties' => [
                             'date' => ['type' => 'string'],
                             'type' => ['type' => 'string'],
-                            'ip' => ['type' => 'string'],
+                            'ip' => ['type' => 'string', 'index' => 'not_analyzed'],
                             'method' => ['type' => 'string'],
-                            'user_host' => ['type' => 'string'],
-                            'user_agent' => ['type' => 'string'],
-                            'host_info' => ['type' => 'string'],
+                            'user_host' => ['type' => 'string', 'index' => 'not_analyzed'],
+                            'user_agent' => ['type' => 'string', 'index' => 'not_analyzed'],
+                            'host_info' => ['type' => 'string', 'index' => 'not_analyzed'],
                             'reqest_uri' => ['type' => 'string'],
-                            'get' => ['type' => 'string'],
-                            'post' => ['type' => 'string'],
-                            'raw_body' => ['type' => 'string'],
-                            'request_user_id' => ['type' => 'integer'],
+                            'get' => ['type' => 'string', 'index' => 'not_analyzed'],
+                            'post' => ['type' => 'string', 'index' => 'not_analyzed'],
+                            'raw_body' => ['type' => 'string', 'index' => 'not_analyzed'],
+                            'request_user_id' => ['type' => 'integer', 'index' => 'not_analyzed'],
                         ]
                     ]
                 ]
