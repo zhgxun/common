@@ -88,7 +88,7 @@ class Helper
         }
         $count = count($chars) - 1;
         $str = '';
-        for($i=0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $str .= $chars[mt_rand(0, $count)];
         }
         return $str;
