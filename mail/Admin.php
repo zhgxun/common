@@ -25,7 +25,8 @@ class Admin
      */
     public function send($template, $params = [], $to = '', $cc = [], $file = '', $subject = '')
     {
-        $mail = \Yii::$app->mailer->compose($template, $params)
+        $mail = \Yii::$app->mailer
+            ->compose($template, $params)
             ->setFrom(['zhgxun1989@163.com' => 'Do Not Reply'])
             ->setTo($to);
         if ($cc) {
