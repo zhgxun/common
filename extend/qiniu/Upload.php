@@ -36,21 +36,6 @@ class Upload
     }
 
     /**
-     * 上传一段文本内容
-     * @param string $content 需要上传的文本内容
-     * @return mixed ['hash' => '', 'key' => ''] 成功后的文件名保存在key=>value中
-     */
-    public function uploadText($content)
-    {
-        list($ret, $error) = (new UploadManager())->put($this->token, null, $content);
-        if ($error !== null) {
-            return $error;
-        } else {
-            return $ret;
-        }
-    }
-
-    /**
      * 上传图片
      * @param string $fileName 图片名
      * @param string $filePath 图片存放路径

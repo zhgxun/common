@@ -20,7 +20,6 @@ final class ResumeUploader
     private $size;
     private $params;
     private $mime;
-    private $progressHandler;
     private $contexts;
     private $host;
     private $currentUrl;
@@ -37,16 +36,6 @@ final class ResumeUploader
      * @param $mime       上传数据的mimeType
      *
      * @link http://developer.qiniu.com/docs/v6/api/overview/up/response/vars.html#xvar
-     */
-    /**
-     * ResumeUploader constructor.
-     * @param $upToken
-     * @param $key
-     * @param $inputStream
-     * @param $size
-     * @param $params
-     * @param $mime
-     * @param $config
      */
     public function __construct(
         $upToken,
@@ -65,7 +54,12 @@ final class ResumeUploader
         $this->mime = $mime;
         $this->contexts = array();
         $this->config = $config;
-        $this->host = $config->getUpHost();
+
+        list($upHost, $err) = $config->zone->getUpHostByToken($upToken);
+        if ($err != null) {
+            throw new \Exception($err, 1);
+        }
+        $this->host = $upHost;
     }
 
     /**
@@ -78,7 +72,6 @@ final class ResumeUploader
             $blockSize = $this->blockSize($uploaded);
             $data = fread($this->inputStream, $blockSize);
             if ($data === false) {
-                fclose($this->inputStream);
                 throw new \Exception("file read failed", 1);
             }
             $crc = \Qiniu\crc32_data($data);
@@ -88,7 +81,11 @@ final class ResumeUploader
                 $ret = $response->json();
             }
             if ($response->statusCode < 0) {
-                $this->host = $this->config->getUpHostBackup();
+                list($bakHost, $err) = $this->config->zone->getBackupUpHostByToken($this->upToken);
+                if ($err != null) {
+                    return array(null, $err);
+                }
+                $this->host = $bakHost;
             }
             if ($response->needRetry() || !isset($ret['crc32']) || $crc != $ret['crc32']) {
                 $response = $this->makeBlock($data, $blockSize);
@@ -96,13 +93,11 @@ final class ResumeUploader
             }
 
             if (! $response->ok() || !isset($ret['crc32'])|| $crc != $ret['crc32']) {
-                fclose($this->inputStream);
                 return array(null, new Error($this->currentUrl, $response));
             }
             array_push($this->contexts, $ret['ctx']);
             $uploaded += $blockSize;
         }
-        fclose($this->inputStream);
         return $this->makeFile();
     }
 
