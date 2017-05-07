@@ -111,7 +111,7 @@ class Helper
      * 获取本机IP地址
      * @return null|string
      */
-    public function getLocalIp()
+    public static function getLocalIp()
     {
         static $ip = null;
         if (!$ip) {
@@ -143,7 +143,7 @@ class Helper
      * @param string $endDate 结束时间
      * @return array
      */
-    public function datesBetween($startDate, $endDate)
+    public static function datesBetween($startDate, $endDate)
     {
         $date = array();
         $currentDate = $startDate;
@@ -159,7 +159,7 @@ class Helper
      * @param string $date 当前日期
      * @return string
      */
-    public function nextMonth($date)
+    public static function nextMonth($date)
     {
         return date("Y-m-d", strtotime("+1 month", strtotime($date)));
     }
